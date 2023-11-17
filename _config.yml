@@ -22,9 +22,9 @@ author:
 
 # URL settings
 url: "https://brizaldi.github.io" #
-baseurl:
+baseurl: /
 permalink: /:title/
-google_analytics: # leave it blank if not wish
+google_analytics: G-JL98Z8VWH0
 fb_appid:
 
 # Collection setting
