@@ -1,7 +1,6 @@
 ---
 title: Quickest method to install Docker on Linux
 date: 2023-11-17 17:27:00 +07:00
-# modified: 2023-11-16 10:49:00 +07:00
 tags: [tutorial, devops, docker, linux]
 description: Quickest method to install Docker on Linux.
 ---
