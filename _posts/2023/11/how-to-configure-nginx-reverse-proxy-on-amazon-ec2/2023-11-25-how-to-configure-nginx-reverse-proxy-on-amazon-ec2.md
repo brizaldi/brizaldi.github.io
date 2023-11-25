@@ -10,7 +10,7 @@ Install prerequisites package
 $ sudo yum install yum-utils
 ```
 
-Create a file named `nginx.repo` with the following contents
+Create a file named `nginx.repo` with the following contents:
 ```bash
 $ sudo mkdir -p /etc/yum.repod.d
 $ sudo vim /etc/yum.repod.d/nginx.repo
@@ -46,7 +46,7 @@ $ sudo systemctl enable nginx
 $ sudo systemctl start nginx
 ```
 
-Check if the default `sites-available` exists in the `/etc/nginx/sites-available/` directory. If it doesn't exist, then create a new default file with the following content:
+Check if the default `sites-available` exists in the `/etc/nginx/sites-available/` directory. If it doesn't exist, then create a new default file with the following contents:
 ```bash
 $ sudo mkdir -p /etc/nginx/sites-available
 $ sudo vim /etc/nginx/sites-available/default
@@ -157,7 +157,7 @@ Then, edit the server -> location block like this:
         }
 ```
 
-Don't forget to change the 'proxy_pass' value according to the intended destination value.
+Don't forget to change the `proxy_pass` value according to the intended destination value.
 
 Include the default `sites-available` into the nginx.conf file
 ```bash
@@ -182,4 +182,4 @@ $ sudo systemctl restart nginx
 ##### Resources
 
 - [Nginx install documentation](https://nginx.org/en/linux_packages.html#Amazon-Linux)
-- [Nginx revers proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy)
+- [Nginx reverse proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy)
