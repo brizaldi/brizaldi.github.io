@@ -1,0 +1,136 @@
+<!DOCTYPE html> <html lang="en-US"> <head prefix="og: http://ogp.me/ns#"> <meta charset="UTF-8" /> <meta http-equiv="X-UA-Compatible" content="ie=edge" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <meta name="mobile-web-app-capable" content="yes" /> <meta name="apple-mobile-web-app-capable" content="yes" /> <meta name="application-name" content="Bahri Rizaldi" /> <meta name="apple-mobile-web-app-status-bar-style" content="#fff" /> <meta name="apple-mobile-web-app-title" content="Bahri Rizaldi" /> <title> How to configure Nginx as a reverse proxy on Amazon EC2 - Bahri Rizaldi </title> <link rel="alternate" href="https://brizaldi.github.io/how-to-configure-nginx-reverse-proxy-on-amazon-ec2/" hreflang="en-US" /> <link rel="canonical" href="https://brizaldi.github.io/how-to-configure-nginx-reverse-proxy-on-amazon-ec2/" /> <meta name="description" content="How to configure Nginx as a reverse proxy on Amazon EC2." /> <meta name="referrer" content="no-referrer-when-downgrade" /> <meta property="fb:app_id" content="" /> <meta property="og:site_name" content="How to configure Nginx as a reverse proxy on Amazon EC2 | Bahri Rizaldi" /> <meta property="og:title" content="How to configure Nginx as a reverse proxy on Amazon EC2 | Bahri Rizaldi" /> <meta property="og:type" content="website" /> <meta property="og:url" content="https://brizaldi.github.io/how-to-configure-nginx-reverse-proxy-on-amazon-ec2/" /> <meta property="og:description" content="How to configure Nginx as a reverse proxy on Amazon EC2." /> <meta property="og:image" content="https://brizaldi.github.io/assets/img/ogp.png" /> <meta property="og:image:width" content="640" /> <meta property="og:image:height" content="640" /> <meta name="twitter:card" content="summary" /> <meta name="twitter:title" content="How to configure Nginx as a reverse proxy on Amazon EC2 | twitter_username" /> <meta name="twitter:url" content="https://brizaldi.github.io/how-to-configure-nginx-reverse-proxy-on-amazon-ec2/" /> <meta name="twitter:site" content="@twitter_username" /> <meta name="twitter:creator" content="@twitter_username" /> <meta name="twitter:description" content="How to configure Nginx as a reverse proxy on Amazon EC2." /> <meta name="twitter:image" content="https://brizaldi.github.io/assets/img/ogp.png" /> <link type="application/atom+xml" rel="alternate" href="https://brizaldi.github.io/feed.xml" title="Bahri Rizaldi" /> <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png" /> <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon-32x32.png" /> <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicons/favicon-16x16.png" /> <link rel="manifest" href="/assets/favicons/site.webmanifest" /> <link rel="mask-icon" href="/assets/favicons/safari-pinned-tab.svg" color="#5bbad5" /> <meta name="apple-mobile-web-app-title" content="Bahri Rizaldi" /> <meta name="application-name" content="Bahri Rizaldi Blog" /> <meta name="msapplication-TileColor" content="#da532c" /> <meta name="theme-color" content="#2c2c2c" /> <link rel="stylesheet" href="/assets/css/style.css" /> <!-- for mathjax support --> <!-- Google Analytics --> <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL98Z8VWH0"></script> <script> window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-JL98Z8VWH0'); </script> <!-- End Google Analytics --></head> <body data-theme="dark" class="notransition"> <script> const body = document.body; const data = body.getAttribute("data-theme"); const initTheme = (state) => { if (state === "dark") { body.setAttribute("data-theme", "dark"); } else if (state === "light") { body.removeAttribute("data-theme"); } else { localStorage.setItem("theme", data); } }; initTheme(localStorage.getItem("theme")); setTimeout(() => body.classList.remove("notransition"), 75); </script> <div class="navbar" role="navigation"> <nav class="menu"> <input type="checkbox" id="menu-trigger" class="menu-trigger" /> <label for="menu-trigger"> <span class="menu-icon"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512" > <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" /> </svg> </span> </label> <a id="mode"> <svg class="mode-sunny" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512" > <title>LIGHT</title> <line x1="256" y1="48" x2="256" y2="96" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="256" y1="416" x2="256" y2="464" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="403.08" y1="108.92" x2="369.14" y2="142.86" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="142.86" y1="369.14" x2="108.92" y2="403.08" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="464" y1="256" x2="416" y2="256" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="96" y1="256" x2="48" y2="256" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="403.08" y1="403.08" x2="369.14" y2="369.14" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="142.86" y1="142.86" x2="108.92" y2="108.92" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <circle cx="256" cy="256" r="80" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> </svg> <svg class="mode-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512" > <title>DARK</title> <line x1="256" y1="48" x2="256" y2="96" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="256" y1="416" x2="256" y2="464" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="403.08" y1="108.92" x2="369.14" y2="142.86" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="142.86" y1="369.14" x2="108.92" y2="403.08" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="464" y1="256" x2="416" y2="256" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="96" y1="256" x2="48" y2="256" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="403.08" y1="403.08" x2="369.14" y2="369.14" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <line x1="142.86" y1="142.86" x2="108.92" y2="108.92" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> <circle cx="256" cy="256" r="80" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" /> </svg> </a> <div class="trigger"> <div class="trigger-container"><a class="menu-link" href="/">home</a><a class="menu-link" href="/archive/">archive</a><a class="menu-link" href="/about/">about</a><a class="menu-link" href="/tags/">tags</a><a class="menu-link" href="https://github.com/brizaldi" target="_blank" rel="noopener" >github</a ><a class="menu-link" href="https://www.linkedin.com/in/bahri-rizaldi" target="_blank" rel="noopener" >linkedin</a ><a class="menu-link rss" href="/feed.xml"> <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 512 512" fill="#ED812E" > <title>RSS</title> <path d="M108.56,342.78a60.34,60.34,0,1,0,60.56,60.44A60.63,60.63,0,0,0,108.56,342.78Z" /> <path d="M48,186.67v86.55c52,0,101.94,15.39,138.67,52.11s52,86.56,52,138.67h86.66C325.33,312.44,199.67,186.67,48,186.67Z" /> <path d="M48,48v86.56c185.25,0,329.22,144.08,329.22,329.44H464C464,234.66,277.67,48,48,48Z" /> </svg> </a> </div> </div> </nav> </div> <div class="wrapper post"> <main class="page-content" aria-label="Content"> <article itemscope itemtype="https://schema.org/BlogPosting"> <header class="header"> <div class="tags"> <span itemprop="keywords"> <a class="tag" href="/tags/#tutorial">TUTORIAL</a>, <a class="tag" href="/tags/#aws">AWS</a>, <a class="tag" href="/tags/#nginx">NGINX</a> </span> </div> <h1 class="header-title" itemprop="headline">How to configure Nginx as a reverse proxy on Amazon EC2</h1> <div class="post-meta"> <time datetime="2023-11-25T08:38:00+07:00" itemprop="datePublished"> Nov 25, 2023 </time> <span itemprop="author" itemscope itemtype="https://schema.org/Person"> <span itemprop="name">Bahri Rizaldi</span> </span> <time hidden datetime="" itemprop="dateModified"> Nov 25, 2023 </time> <span hidden itemprop="publisher" itemtype="Person">Bahri Rizaldi</span> <span hidden itemprop="image"></span> <span hidden itemprop="mainEntityOfPage"><p>Install prerequisites package</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>yum <span class="nb">install </span>yum-utils
+</code></pre></div></div> </span> </div> </header> <div class="page-content" itemprop="articleBody"> <p>Install prerequisites package</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>yum <span class="nb">install </span>yum-utils
+</code></pre></div></div> <p>Create a file named <code class="language-plaintext highlighter-rouge">nginx.repo</code> with the following contents:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo mkdir</span> <span class="nt">-p</span> /etc/yum.repod.d
+<span class="nv">$ </span><span class="nb">sudo </span>vim /etc/yum.repod.d/nginx.repo
+</code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>nginx-stable]
+<span class="nv">name</span><span class="o">=</span>nginx stable repo
+<span class="nv">baseurl</span><span class="o">=</span>http://nginx.org/packages/amzn/2023/<span class="nv">$basearch</span>/
+<span class="nv">gpgcheck</span><span class="o">=</span>1
+<span class="nv">enabled</span><span class="o">=</span>1
+<span class="nv">gpgkey</span><span class="o">=</span>https://nginx.org/keys/nginx_signing.key
+<span class="nv">module_hotfixes</span><span class="o">=</span><span class="nb">true
+</span><span class="nv">priority</span><span class="o">=</span>9
+
+<span class="o">[</span>nginx-mainline]
+<span class="nv">name</span><span class="o">=</span>nginx mainline repo
+<span class="nv">baseurl</span><span class="o">=</span>http://nginx.org/packages/mainline/amzn/2023/<span class="nv">$basearch</span>/
+<span class="nv">gpgcheck</span><span class="o">=</span>1
+<span class="nv">enabled</span><span class="o">=</span>0
+<span class="nv">gpgkey</span><span class="o">=</span>https://nginx.org/keys/nginx_signing.key
+<span class="nv">module_hotfixes</span><span class="o">=</span><span class="nb">true
+</span><span class="nv">priority</span><span class="o">=</span>9
+</code></pre></div></div> <p>Install nginx</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>yum <span class="nb">install </span>nginx
+</code></pre></div></div> <p>Start nginx</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>systemctl <span class="nb">enable </span>nginx
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl start nginx
+</code></pre></div></div> <p>Check if the default <code class="language-plaintext highlighter-rouge">sites-available</code> exists in the <code class="language-plaintext highlighter-rouge">/etc/nginx/sites-available/</code> directory. If it doesn’t exist, then create a new default file with the following contents:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo mkdir</span> <span class="nt">-p</span> /etc/nginx/sites-available
+<span class="nv">$ </span><span class="nb">sudo </span>vim /etc/nginx/sites-available/default
+</code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">##</span>
+<span class="c"># You should look at the following URL's in order to grasp a solid understanding</span>
+<span class="c"># of Nginx configuration files in order to fully unleash the power of Nginx.</span>
+<span class="c"># http://wiki.nginx.org/Pitfalls</span>
+<span class="c"># http://wiki.nginx.org/QuickStart</span>
+<span class="c"># http://wiki.nginx.org/Configuration</span>
+<span class="c">#</span>
+<span class="c"># Generally, you will want to move this file somewhere, and start with a clean</span>
+<span class="c"># file but keep this around for reference. Or just disable in sites-enabled.</span>
+<span class="c">#</span>
+<span class="c"># Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.</span>
+<span class="c">##</span>
+
+<span class="c"># Default server configuration</span>
+<span class="c">#</span>
+server <span class="o">{</span>
+        listen 80 default_server<span class="p">;</span>
+        listen <span class="o">[</span>::]:80 default_server<span class="p">;</span>
+
+        <span class="c"># SSL configuration</span>
+        <span class="c">#</span>
+        <span class="c"># listen 443 ssl default_server;</span>
+        <span class="c"># listen [::]:443 ssl default_server;</span>
+        <span class="c">#</span>
+        <span class="c"># Note: You should disable gzip for SSL traffic.</span>
+        <span class="c"># See: https://bugs.debian.org/773332</span>
+        <span class="c">#</span>
+        <span class="c"># Read up on ssl_ciphers to ensure a secure configuration.</span>
+        <span class="c"># See: https://bugs.debian.org/765782</span>
+        <span class="c">#</span>
+        <span class="c"># Self signed certs generated by the ssl-cert package</span>
+        <span class="c"># Don't use them in a production server!</span>
+        <span class="c">#</span>
+        <span class="c"># include snippets/snakeoil.conf;</span>
+
+        root /var/www/html<span class="p">;</span>
+
+        <span class="c"># Add index.php to the list if you are using PHP</span>
+        index index.html index.htm index.nginx-debian.html<span class="p">;</span>
+
+        server_name _<span class="p">;</span>
+
+        location / <span class="o">{</span>
+                <span class="c"># First attempt to serve request as file, then</span>
+                <span class="c"># as directory, then fall back to displaying a 404.</span>
+                try_files <span class="nv">$uri</span> <span class="nv">$uri</span>/ <span class="o">=</span>404<span class="p">;</span>
+                <span class="c"># proxy_pass http://localhost:8080;</span>
+                <span class="c"># proxy_http_version 1.1;</span>
+                <span class="c"># proxy_set_header Upgrade $http_upgrade;</span>
+                <span class="c"># proxy_set_header Connection 'upgrade';</span>
+                <span class="c"># proxy_set_header Host $host;</span>
+                <span class="c"># proxy_cache_bypass $http_upgrade;</span>
+        <span class="o">}</span>
+
+        <span class="c"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span>
+        <span class="c">#</span>
+        <span class="c">#location ~ \.php$ {</span>
+        <span class="c"># include snippets/fastcgi-php.conf;</span>
+        <span class="c">#</span>
+        <span class="c">#       # With php7.0-cgi alone:</span>
+        <span class="c">#       fastcgi_pass 127.0.0.1:9000;</span>
+        <span class="c">#       # With php7.0-fpm:</span>
+        <span class="c">#       fastcgi_pass unix:/run/php/php7.0-fpm.sock;</span>
+        <span class="c">#}</span>
+
+        <span class="c"># deny access to .htaccess files, if Apache's document root</span>
+        <span class="c"># concurs with nginx's one</span>
+        <span class="c">#</span>
+        <span class="c">#location ~ /\.ht {</span>
+        <span class="c">#       deny all;</span>
+        <span class="c">#}</span>
+<span class="o">}</span>
+
+<span class="c"># Virtual Host configuration for example.com</span>
+<span class="c">#</span>
+<span class="c"># You can move that to a different file under sites-available/ and symlink that</span>
+<span class="c"># to sites-enabled/ to enable it.</span>
+<span class="c">#</span>
+<span class="c">#server {</span>
+<span class="c">#       listen 80;</span>
+<span class="c">#       listen [::]:80;</span>
+<span class="c">#</span>
+<span class="c">#       server_name example.com;</span>
+<span class="c">#</span>
+<span class="c">#       root /var/www/example.com;</span>
+<span class="c">#       index index.html;</span>
+<span class="c">#</span>
+<span class="c">#       location / {</span>
+<span class="c">#              try_files $uri $uri/ =404;</span>
+<span class="c">#       }</span>
+<span class="c">#</span>
+</code></pre></div></div> <p>Then, edit the server -&gt; location block like this:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        location / <span class="o">{</span>
+                proxy_pass http://localhost:8080<span class="p">;</span>
+                proxy_http_version 1.1<span class="p">;</span>
+                proxy_set_header Upgrade <span class="nv">$http_upgrade</span><span class="p">;</span>
+                proxy_set_header Connection <span class="s1">'upgrade'</span><span class="p">;</span>
+                proxy_set_header Host <span class="nv">$host</span><span class="p">;</span>
+                proxy_cache_bypass <span class="nv">$http_upgrade</span><span class="p">;</span>
+        <span class="o">}</span>
+</code></pre></div></div> <p>Don’t forget to change the <code class="language-plaintext highlighter-rouge">proxy_pass</code> value according to the intended destination value.</p> <p>Include the default <code class="language-plaintext highlighter-rouge">sites-available</code> into the nginx.conf file</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>vim /etc/nginx/nginx.conf
+</code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http <span class="o">{</span>
+    ...
+
+    <span class="c">#gzip  on;</span>
+
+    include /etc/nginx/conf.d/<span class="k">*</span>.conf<span class="p">;</span>
+    include /etc/nginx/sites-available/<span class="k">*</span><span class="p">;</span> <span class="c">## Add this line</span>
+<span class="o">}</span>
+</code></pre></div></div> <p>Finally restart the nginx to apply the changes</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>systemctl restart nginx
+</code></pre></div></div> <h5 id="resources"> Resources </h5> <ul> <li><a href="https://nginx.org/en/linux_packages.html#Amazon-Linux">Nginx install documentation</a></li> <li><a href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy">Nginx reverse proxy</a></li> </ul> </div> </article> <!-- unnecessary file, however you can still use for comment section, e.g disqus --> <script src="https://utteranc.es/client.js" repo="brizaldi/brizaldi.github.io" issue-term="pathname" label="✨ comment ✨" theme="github-dark" crossorigin="anonymous" async></script> </main> <nav class="post-nav"> <a class="post-nav-item post-nav-prev" href="/fix-kubernetes-cluster-unreachable-when-doing-helm-install-on-k3s/" > <div class="nav-arrow">Previous</div> <span class="post-title">Fix Kubernetes cluster unreachable when doing Helm install on K3s</span> </a> <a class="post-nav-item post-nav-next" href="/fix-kubernetes-namespace-stuck-in-terminating/"> <div class="nav-arrow">Next</div> <span class="post-title">Fix Kubernetes namespace stuck in Terminating status</span> </a> </nav> <footer class="footer"> <a class="footer_item" href="/feed.xml">rss</a> <span class="footer_item">&copy; 2025</span> <small class="footer_copyright"> The blog posts are licensed under a <a href="https://github.com/brizaldi/brizaldi.github.io/blob/master/CC-BY-NC-SA-4.0" target="_blank" rel="noreferrer noopener">BY-NC-SA-4.0</a> license. </small> </footer> <script src="/assets/js/main.js" defer="defer"></script> </div> </body> </html>

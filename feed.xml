@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="https://brizaldi.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://brizaldi.github.io/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2025-01-31T09:38:58+07:00</updated><id>https://brizaldi.github.io/feed.xml</id><title type="html">Bahri Rizaldi</title><subtitle>My daily snippets</subtitle><author><name>Bahri Rizaldi</name><email>bahri.rizaldi13@gmail.com</email></author><entry><title type="html">Troubleshoot pyenv-win on Windows &amp;amp; pyenv on WSL installation</title><link href="https://brizaldi.github.io/troubleshoot-pyenv-win-pyenv-wsl-installation/" rel="alternate" type="text/html" title="Troubleshoot pyenv-win on Windows &amp;amp; pyenv on WSL installation" /><published>2025-01-31T09:11:00+07:00</published><updated>2025-01-31T09:11:00+07:00</updated><id>https://brizaldi.github.io/troubleshoot-pyenv-win-pyenv-wsl-installation</id><content type="html" xml:base="https://brizaldi.github.io/troubleshoot-pyenv-win-pyenv-wsl-installation/"><![CDATA[<p>Update .bashrc / .profile / .bash_profile in WSL</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">command</span> <span class="nt">-v</span> pyenv <span class="o">&gt;</span>/dev/null <span class="o">||</span> <span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PYENV_ROOT</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>With this value:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PYENV_ROOT</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">"</span>
+</code></pre></div></div>]]></content><author><name>Bahri Rizaldi</name><email>bahri.rizaldi13@gmail.com</email></author><category term="tutorial" /><category term="windows" /><category term="linux" /><summary type="html"><![CDATA[Troubleshoot pyenv-win on Windows & pyenv on WSL installation.]]></summary></entry><entry><title type="html">Install specific version of APT package</title><link href="https://brizaldi.github.io/install-specific-version-of-apt-package/" rel="alternate" type="text/html" title="Install specific version of APT package" /><published>2025-01-20T13:23:00+07:00</published><updated>2025-01-20T13:23:00+07:00</updated><id>https://brizaldi.github.io/install-specific-version-of-apt-package</id><content type="html" xml:base="https://brizaldi.github.io/install-specific-version-of-apt-package/"><![CDATA[<p>List available version:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt list <span class="nt">-a</span> &lt;PACKAGE_NAME&gt;
+</code></pre></div></div>
+
+<p>Install specific version:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt <span class="nb">install</span> &lt;PACKAGE_NAME&gt;<span class="o">=</span>&lt;PACKAGE_VERSION&gt;
+</code></pre></div></div>
+
+<p>For example:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt <span class="nb">install </span><span class="nv">terraform</span><span class="o">=</span>1.10.4-1
+</code></pre></div></div>]]></content><author><name>Bahri Rizaldi</name><email>bahri.rizaldi13@gmail.com</email></author><category term="tutorial" /><category term="linux" /><summary type="html"><![CDATA[Install specific version of APT package.]]></summary></entry><entry><title type="html">Fix Kubernetes namespace stuck in Terminating status</title><link href="https://brizaldi.github.io/fix-kubernetes-namespace-stuck-in-terminating/" rel="alternate" type="text/html" title="Fix Kubernetes namespace stuck in Terminating status" /><published>2024-06-18T10:26:00+07:00</published><updated>2024-06-18T10:26:00+07:00</updated><id>https://brizaldi.github.io/fix-kubernetes-namespace-stuck-in-terminating</id><content type="html" xml:base="https://brizaldi.github.io/fix-kubernetes-namespace-stuck-in-terminating/"><![CDATA[<p>Run using kubectl</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl patch ns &lt;NAMESPACE_TO_BE_DELETED&gt; <span class="nt">-p</span> <span class="s1">'{"metadata":{"finalizers":null}}'</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Some resources are remaining: ingresses.extensions has 1 resource instances, ingresses.networking.k8s.io has 1 resource instances
+Some content in the namespace has finalizers remaining: ingress.k8s.aws/resources in 2 resource instances</p>
+</blockquote>
+
+<p>If you got the error above, that means you still have resources left in your namespace, in this case, an ingress. You must delete the remaining resources first before the namespace can be deleted.</p>
+
+<p>To patch the ingress:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl patch ingress &lt;INGRESS_NAME&gt; <span class="nt">-n</span> &lt;NAMESPACE&gt; <span class="nt">-p</span> <span class="s1">'{"metadata":{"finalizers":[]}}'</span> <span class="nt">--type</span><span class="o">=</span>merge
+</code></pre></div></div>]]></content><author><name>Bahri Rizaldi</name><email>bahri.rizaldi13@gmail.com</email></author><category term="tutorial" /><category term="devops" /><category term="kubernetes" /><summary type="html"><![CDATA[Fix Kubernetes namespace stuck in Terminating status.]]></summary></entry><entry><title type="html">How to configure Nginx as a reverse proxy on Amazon EC2</title><link href="https://brizaldi.github.io/how-to-configure-nginx-reverse-proxy-on-amazon-ec2/" rel="alternate" type="text/html" title="How to configure Nginx as a reverse proxy on Amazon EC2" /><published>2023-11-25T08:38:00+07:00</published><updated>2023-11-25T08:38:00+07:00</updated><id>https://brizaldi.github.io/how-to-configure-nginx-reverse-proxy-on-amazon-ec2</id><content type="html" xml:base="https://brizaldi.github.io/how-to-configure-nginx-reverse-proxy-on-amazon-ec2/"><![CDATA[<p>Install prerequisites package</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>yum <span class="nb">install </span>yum-utils
+</code></pre></div></div>
+
+<p>Create a file named <code class="language-plaintext highlighter-rouge">nginx.repo</code> with the following contents:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo mkdir</span> <span class="nt">-p</span> /etc/yum.repod.d
+<span class="nv">$ </span><span class="nb">sudo </span>vim /etc/yum.repod.d/nginx.repo
+</code></pre></div></div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>nginx-stable]
+<span class="nv">name</span><span class="o">=</span>nginx stable repo
+<span class="nv">baseurl</span><span class="o">=</span>http://nginx.org/packages/amzn/2023/<span class="nv">$basearch</span>/
+<span class="nv">gpgcheck</span><span class="o">=</span>1
+<span class="nv">enabled</span><span class="o">=</span>1
+<span class="nv">gpgkey</span><span class="o">=</span>https://nginx.org/keys/nginx_signing.key
+<span class="nv">module_hotfixes</span><span class="o">=</span><span class="nb">true
+</span><span class="nv">priority</span><span class="o">=</span>9
+
+<span class="o">[</span>nginx-mainline]
+<span class="nv">name</span><span class="o">=</span>nginx mainline repo
+<span class="nv">baseurl</span><span class="o">=</span>http://nginx.org/packages/mainline/amzn/2023/<span class="nv">$basearch</span>/
+<span class="nv">gpgcheck</span><span class="o">=</span>1
+<span class="nv">enabled</span><span class="o">=</span>0
+<span class="nv">gpgkey</span><span class="o">=</span>https://nginx.org/keys/nginx_signing.key
+<span class="nv">module_hotfixes</span><span class="o">=</span><span class="nb">true
+</span><span class="nv">priority</span><span class="o">=</span>9
+</code></pre></div></div>
+
+<p>Install nginx</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>yum <span class="nb">install </span>nginx
+</code></pre></div></div>
+
+<p>Start nginx</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>systemctl <span class="nb">enable </span>nginx
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl start nginx
+</code></pre></div></div>
+
+<p>Check if the default <code class="language-plaintext highlighter-rouge">sites-available</code> exists in the <code class="language-plaintext highlighter-rouge">/etc/nginx/sites-available/</code> directory. If it doesn’t exist, then create a new default file with the following contents:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo mkdir</span> <span class="nt">-p</span> /etc/nginx/sites-available
+<span class="nv">$ </span><span class="nb">sudo </span>vim /etc/nginx/sites-available/default
+</code></pre></div></div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">##</span>
+<span class="c"># You should look at the following URL's in order to grasp a solid understanding</span>
+<span class="c"># of Nginx configuration files in order to fully unleash the power of Nginx.</span>
+<span class="c"># http://wiki.nginx.org/Pitfalls</span>
+<span class="c"># http://wiki.nginx.org/QuickStart</span>
+<span class="c"># http://wiki.nginx.org/Configuration</span>
+<span class="c">#</span>
+<span class="c"># Generally, you will want to move this file somewhere, and start with a clean</span>
+<span class="c"># file but keep this around for reference. Or just disable in sites-enabled.</span>
+<span class="c">#</span>
+<span class="c"># Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.</span>
+<span class="c">##</span>
+
+<span class="c"># Default server configuration</span>
+<span class="c">#</span>
+server <span class="o">{</span>
+        listen 80 default_server<span class="p">;</span>
+        listen <span class="o">[</span>::]:80 default_server<span class="p">;</span>
+
+        <span class="c"># SSL configuration</span>
+        <span class="c">#</span>
+        <span class="c"># listen 443 ssl default_server;</span>
+        <span class="c"># listen [::]:443 ssl default_server;</span>
+        <span class="c">#</span>
+        <span class="c"># Note: You should disable gzip for SSL traffic.</span>
+        <span class="c"># See: https://bugs.debian.org/773332</span>
+        <span class="c">#</span>
+        <span class="c"># Read up on ssl_ciphers to ensure a secure configuration.</span>
+        <span class="c"># See: https://bugs.debian.org/765782</span>
+        <span class="c">#</span>
+        <span class="c"># Self signed certs generated by the ssl-cert package</span>
+        <span class="c"># Don't use them in a production server!</span>
+        <span class="c">#</span>
+        <span class="c"># include snippets/snakeoil.conf;</span>
+
+        root /var/www/html<span class="p">;</span>
+
+        <span class="c"># Add index.php to the list if you are using PHP</span>
+        index index.html index.htm index.nginx-debian.html<span class="p">;</span>
+
+        server_name _<span class="p">;</span>
+
+        location / <span class="o">{</span>
+                <span class="c"># First attempt to serve request as file, then</span>
+                <span class="c"># as directory, then fall back to displaying a 404.</span>
+                try_files <span class="nv">$uri</span> <span class="nv">$uri</span>/ <span class="o">=</span>404<span class="p">;</span>
+                <span class="c"># proxy_pass http://localhost:8080;</span>
+                <span class="c"># proxy_http_version 1.1;</span>
+                <span class="c"># proxy_set_header Upgrade $http_upgrade;</span>
+                <span class="c"># proxy_set_header Connection 'upgrade';</span>
+                <span class="c"># proxy_set_header Host $host;</span>
+                <span class="c"># proxy_cache_bypass $http_upgrade;</span>
+        <span class="o">}</span>
+
+        <span class="c"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span>
+        <span class="c">#</span>
+        <span class="c">#location ~ \.php$ {</span>
+        <span class="c"># include snippets/fastcgi-php.conf;</span>
+        <span class="c">#</span>
+        <span class="c">#       # With php7.0-cgi alone:</span>
+        <span class="c">#       fastcgi_pass 127.0.0.1:9000;</span>
+        <span class="c">#       # With php7.0-fpm:</span>
+        <span class="c">#       fastcgi_pass unix:/run/php/php7.0-fpm.sock;</span>
+        <span class="c">#}</span>
+
+        <span class="c"># deny access to .htaccess files, if Apache's document root</span>
+        <span class="c"># concurs with nginx's one</span>
+        <span class="c">#</span>
+        <span class="c">#location ~ /\.ht {</span>
+        <span class="c">#       deny all;</span>
+        <span class="c">#}</span>
+<span class="o">}</span>
+
+<span class="c"># Virtual Host configuration for example.com</span>
+<span class="c">#</span>
+<span class="c"># You can move that to a different file under sites-available/ and symlink that</span>
+<span class="c"># to sites-enabled/ to enable it.</span>
+<span class="c">#</span>
+<span class="c">#server {</span>
+<span class="c">#       listen 80;</span>
+<span class="c">#       listen [::]:80;</span>
+<span class="c">#</span>
+<span class="c">#       server_name example.com;</span>
+<span class="c">#</span>
+<span class="c">#       root /var/www/example.com;</span>
+<span class="c">#       index index.html;</span>
+<span class="c">#</span>
+<span class="c">#       location / {</span>
+<span class="c">#              try_files $uri $uri/ =404;</span>
+<span class="c">#       }</span>
+<span class="c">#</span>
+</code></pre></div></div>
+
+<p>Then, edit the server -&gt; location block like this:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        location / <span class="o">{</span>
+                proxy_pass http://localhost:8080<span class="p">;</span>
+                proxy_http_version 1.1<span class="p">;</span>
+                proxy_set_header Upgrade <span class="nv">$http_upgrade</span><span class="p">;</span>
+                proxy_set_header Connection <span class="s1">'upgrade'</span><span class="p">;</span>
+                proxy_set_header Host <span class="nv">$host</span><span class="p">;</span>
+                proxy_cache_bypass <span class="nv">$http_upgrade</span><span class="p">;</span>
+        <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Don’t forget to change the <code class="language-plaintext highlighter-rouge">proxy_pass</code> value according to the intended destination value.</p>
+
+<p>Include the default <code class="language-plaintext highlighter-rouge">sites-available</code> into the nginx.conf file</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>vim /etc/nginx/nginx.conf
+</code></pre></div></div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http <span class="o">{</span>
+    ...
+
+    <span class="c">#gzip  on;</span>
+
+    include /etc/nginx/conf.d/<span class="k">*</span>.conf<span class="p">;</span>
+    include /etc/nginx/sites-available/<span class="k">*</span><span class="p">;</span> <span class="c">## Add this line</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Finally restart the nginx to apply the changes</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>systemctl restart nginx
+</code></pre></div></div>
+
+<h5 id="resources">Resources</h5>
+
+<ul>
+  <li><a href="https://nginx.org/en/linux_packages.html#Amazon-Linux">Nginx install documentation</a></li>
+  <li><a href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy">Nginx reverse proxy</a></li>
+</ul>]]></content><author><name>Bahri Rizaldi</name><email>bahri.rizaldi13@gmail.com</email></author><category term="tutorial" /><category term="aws" /><category term="nginx" /><summary type="html"><![CDATA[How to configure Nginx as a reverse proxy on Amazon EC2.]]></summary></entry><entry><title type="html">Fix Kubernetes cluster unreachable when doing Helm install on K3s</title><link href="https://brizaldi.github.io/fix-kubernetes-cluster-unreachable-when-doing-helm-install-on-k3s/" rel="alternate" type="text/html" title="Fix Kubernetes cluster unreachable when doing Helm install on K3s" /><published>2023-11-23T08:56:00+07:00</published><updated>2023-11-23T08:56:00+07:00</updated><id>https://brizaldi.github.io/fix-kubernetes-cluster-unreachable-when-doing-helm-install-on-k3s</id><content type="html" xml:base="https://brizaldi.github.io/fix-kubernetes-cluster-unreachable-when-doing-helm-install-on-k3s/"><![CDATA[<p>Configure KUBECONFIG</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">export </span><span class="nv">KUBECONFIG</span><span class="o">=</span>/etc/rancher/k3s/k3s.yaml
+</code></pre></div></div>]]></content><author><name>Bahri Rizaldi</name><email>bahri.rizaldi13@gmail.com</email></author><category term="tutorial" /><category term="devops" /><category term="kubernetes" /><category term="linux" /><summary type="html"><![CDATA[Fix Kubernetes cluster unreachable when doing Helm install on K3s.]]></summary></entry><entry><title type="html">Install golang-migrate on Ubuntu 22.04</title><link href="https://brizaldi.github.io/install-golang-migrate-on-ubuntu/" rel="alternate" type="text/html" title="Install golang-migrate on Ubuntu 22.04" /><published>2023-11-21T09:34:00+07:00</published><updated>2023-11-21T09:34:00+07:00</updated><id>https://brizaldi.github.io/install-golang-migrate-on-ubuntu</id><content type="html" xml:base="https://brizaldi.github.io/install-golang-migrate-on-ubuntu/"><![CDATA[<p>Install from release file directly</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>wget http://github.com/golang-migrate/migrate/releases/latest/download/migrate.linux-amd64.deb
+<span class="nv">$ </span><span class="nb">sudo </span>dpkg <span class="nt">-i</span> migrate.linux-amd64.deb
+</code></pre></div></div>
+
+<p>Check installed version</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>migrate <span class="nt">--version</span>
+</code></pre></div></div>
+
+<h5 id="resources">Resources</h5>
+
+<ul>
+  <li><a href="https://github.com/golang-migrate/migrate/issues/818">Related issue</a></li>
+</ul>]]></content><author><name>Bahri Rizaldi</name><email>bahri.rizaldi13@gmail.com</email></author><category term="tutorial" /><category term="golang" /><category term="linux" /><summary type="html"><![CDATA[Install golang-migrate on Ubuntu 22.04.]]></summary></entry><entry><title type="html">Quick method to install Docker on Linux</title><link href="https://brizaldi.github.io/quick-method-to-install-docker-on-linux/" rel="alternate" type="text/html" title="Quick method to install Docker on Linux" /><published>2023-11-17T17:27:00+07:00</published><updated>2023-11-17T17:27:00+07:00</updated><id>https://brizaldi.github.io/quick-method-to-install-docker-on-linux</id><content type="html" xml:base="https://brizaldi.github.io/quick-method-to-install-docker-on-linux/"><![CDATA[<p>Download installation script</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-fsSL</span> https://get.docker.com <span class="nt">-o</span> install-docker.sh
+</code></pre></div></div>
+
+<p>Run the script as root</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>sh install-docker.sh
+</code></pre></div></div>
+
+<p>Add current user to <code class="language-plaintext highlighter-rouge">docker</code> user group</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>usermod <span class="nt">-a</span> <span class="nt">-G</span> docker &lt;user&gt;
+<span class="c"># Example:</span>
+<span class="nv">$ </span><span class="nb">sudo </span>usermod <span class="nt">-a</span> <span class="nt">-G</span> docker john
+</code></pre></div></div>
+
+<p>Re-login into the machine to apply changes</p>
+
+<p>Check if docker successfully installed</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker <span class="nt">--version</span>
+<span class="nv">$ </span>docker ps
+</code></pre></div></div>]]></content><author><name>Bahri Rizaldi</name><email>bahri.rizaldi13@gmail.com</email></author><category term="tutorial" /><category term="devops" /><category term="docker" /><category term="linux" /><summary type="html"><![CDATA[Quick method to install Docker on Linux.]]></summary></entry><entry><title type="html">Setup Kubernetes K3s cluster locally using Multipass</title><link href="https://brizaldi.github.io/setup-kubernetes-k3s-cluster-locally-using-multipass/" rel="alternate" type="text/html" title="Setup Kubernetes K3s cluster locally using Multipass" /><published>2023-11-16T10:49:00+07:00</published><updated>2023-11-16T10:49:00+07:00</updated><id>https://brizaldi.github.io/setup-kubernetes-k3s-cluster-locally-using-multipass</id><content type="html" xml:base="https://brizaldi.github.io/setup-kubernetes-k3s-cluster-locally-using-multipass/"><![CDATA[<p>Create instances</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>multipass launch <span class="nt">-n</span> master <span class="nt">-m</span> 2G
+<span class="nv">$ </span>multipass launch <span class="nt">-n</span> node1
+<span class="nv">$ </span>multipass launch <span class="nt">-n</span> node2
+</code></pre></div></div>
+
+<p>Open shell on running master instance</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>multipass shell master
+</code></pre></div></div>
+
+<p>Setup K3s on master instance</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-sfL</span> https://get.k3s.io | sh <span class="nt">-s</span> - <span class="nt">--write-kubeconfig-mode</span><span class="o">=</span>644
+</code></pre></div></div>
+
+<p>Get master node token</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo cat</span> /var/lib/rancher/k3s/server/node-token
+</code></pre></div></div>
+
+<p>Get master instance IP address</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>multipass info master
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Name:           master
+State:          Running
+IPv4:           172.29.200.132 # Use this IP for the next step
+                10.42.0.0
+                10.42.0.1
+Release:        Ubuntu 22.04.3 LTS
+Image hash:     054db2d88c45 (Ubuntu 22.04 LTS)
+CPU(s):         1
+Load:           0.04 0.03 0.01
+Disk usage:     4.2GiB out of 4.8GiB
+Memory usage:   749.7MiB out of 1.9GiB
+Mounts:         --
+</code></pre></div></div>
+
+<p>Setup K3s on node instance</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-sfL</span> https://get.k3s.io | <span class="nv">K3S_URL</span><span class="o">=</span>https://&lt;master_ip&gt;:6443 <span class="nv">K3S_TOKEN</span><span class="o">=</span>&lt;node_token&gt; sh -
+<span class="c"># Example:</span>
+<span class="nv">$ </span>curl <span class="nt">-sfL</span> https://get.k3s.io | <span class="nv">K3S_URL</span><span class="o">=</span>https://172.29.200.132:6443 <span class="se">\</span>
+  <span class="nv">K3S_TOKEN</span><span class="o">=</span>K106b70f0f7032a2c3582a8ea6b1da6149e4402f32fe28e4bfacaf171b747792b81::server:a91678eecb164d40cb5e0d51c9b22be7 sh -
+</code></pre></div></div>
+
+<p>Check nodes availability</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>kubectl get nodes
+</code></pre></div></div>
+
+<p>Bonus: delete instances</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>multipass stop master node1 node2
+<span class="nv">$ </span>multipass delete master node1 node2
+<span class="nv">$ </span>multipass purge
+</code></pre></div></div>
+
+<h5 id="resources">Resources</h5>
+
+<ul>
+  <li><a href="https://multipass.run/install">Multipass installation</a></li>
+  <li><a href="https://docs.k3s.io/quick-start">K3s quick-start guide</a></li>
+</ul>]]></content><author><name>Bahri Rizaldi</name><email>bahri.rizaldi13@gmail.com</email></author><category term="tutorial" /><category term="devops" /><category term="kubernetes" /><category term="linux" /><summary type="html"><![CDATA[Setup Kubernetes K3s cluster locally using Multipass.]]></summary></entry></feed>
