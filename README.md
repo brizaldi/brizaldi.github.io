@@ -1,6 +1,6 @@
 # Bahri Rizaldi Blog
 
-This blog aims to document all the problems and discoveries I encounter in my daily life.
+My daily snippets.
 
 You can propose changes, say to fix broken links or typos, by [creating a new issue](http://github.com/brizaldi/brizaldi.github.io/issues/new).
 
