@@ -1,6 +1,6 @@
 ---
 title: Properly Encode base64 Value to Use in Kubernetes Secret
-date: 2026-01-04 21:08:00 +07:00
+date: 2026-01-04 19:08:00 +07:00
 tags: [tutorial, kubernetes]
 categories: [Tutorial, Kubernetes]
 ---
