@@ -13,12 +13,12 @@ categories: [Tutorial, Kubernetes]
 kubectl get serviceaccounts -n <NAMESPACE>
 ```
 
-Sample service account name: `account-my-namespace-manager-abcde
+Sample service account name: `account-my-namespace-manager-abcde`
 
 2. Create a new token using the service account above.
 
 ```bash
-kubectl create token <service_account_name> -n <NAMESPACE>
+kubectl create token <SERVICE_ACCOUNT_NAME> -n <NAMESPACE>
 ```
 Sample command:
 
